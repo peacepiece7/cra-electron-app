@@ -23,7 +23,14 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
-    "deploy": "electron-builder --windows nsis:ia32"
+    "electron-pack": "electron-builder build  -mwl",
+    "install:osx": "electron-builder build  --mac",
+    "install:linux": "yarn install:linux32 && yarn install:linux64",
+    "install:linux32": "electron-builder build  --linux --ia32=true tar.xz",
+    "install:linux64": "electron-builder build  --linux --x64=true tar.xz",
+    "install:win": "yarn install:win32 && yarn install:win64",
+    "install:win32": "electron-builder build -w --ia32=true",
+    "install:win64": "electron-builder build -w --x64=true"
   },
   "eslintConfig": {
     "extends": [
@@ -57,30 +64,63 @@
     "url": "https://hahahoho.ha"
   },
   "build": {
-    "productName": "HelloElectron",
-    "appId": "com.electron.hello",
+    "appId": "com.my-website.my-app",
+    "productName": "interbirdMecro",
+    "copyright": "Copyright © 2022 ${author}",
     "asar": true,
     "protocols": {
-      "name": "helloElectron",
+      "name": "chiroTest20200109",
       "schemes": [
-        "helloelectron"
+        "chiroTest20200109"
       ]
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "target": [
+        "default"
+      ],
+      "icon": "./logo512.png"
+    },
+    "dmg": {
+      "title": "tournant",
+      "icon": "./logo512.png"
     },
     "win": {
       "target": [
         "zip",
         "nsis"
       ],
-      "icon": "./resources/installer/Icon.ico"
+      "icon": "./logo512.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm",
+        "zip",
+        "tar.gz"
+      ],
+      "icon": "./plogo512.png"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": false,
+      "installerLanguages": [
+        "en_US",
+        "ko_KR"
+      ],
+      "language": "1042"
     },
     "directories": {
-      "buildResources": "./resources/installer/",
-      "output": "./dist/",
+      "buildResources": "build/",
+      "output": "dist/",
       "app": "."
     }
-  }
+  },
+  "rescripts": [
+    "env"
+  ]
 }
